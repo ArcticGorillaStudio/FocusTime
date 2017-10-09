@@ -37,13 +37,29 @@ public class MainActivity extends AppCompatActivity {
     public void StartCount(int minutes){
         int milliseconds = (minutes * 60) * 1000;
 
-        new CountDownTimer(milliseconds, 100) {
+
+        new CountDownTimer(milliseconds, 1000) {
+
+            long s = 60;
+            long ms = 1000;
 
             public void onTick(long millisUntilFinished){
+                long m = (millisUntilFinished / 1000) / 60;
 
-                long s = millisUntilFinished / 1000;
-                long m = s * 60;
-                timeCounter.setText(String.format("%d:%02d:%02d", m,s,millisUntilFinished));
+                timeCounter.setText(String.format("%d:%02d:%02d", m,s,ms) );
+
+
+                ms--;
+
+                if(s == 0){
+                    s = 60;
+                }
+
+                if(ms == 0){
+                    ms = 1000;
+                    s--;
+                }
+
             }
 
             public void onFinish() {
