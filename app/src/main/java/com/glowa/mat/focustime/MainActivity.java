@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -19,8 +20,10 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnStart;
     ProgressBar circProgressBar;
-    TextView time;
+    EditText time;
     Vibrator vibrator;
+    boolean isCounting = false;
+    public Long milliLeft;
 
 
     @Override
@@ -30,16 +33,19 @@ public class MainActivity extends AppCompatActivity {
 
         btnStart = (Button) findViewById(R.id.btnStart);
         circProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        time = (TextView) findViewById(R.id.textView2);
+        time = (EditText) findViewById(R.id.textView2);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                   int iloscMinut = Integer.parseInt((String) time.getText());
+                if(!isCounting) {
+                    int iloscMinut = Integer.parseInt(String.valueOf(time.getText()));
                     StartCount(iloscMinut);
+                }else{
 
+                }
             }
         });
 
@@ -51,6 +57,12 @@ public class MainActivity extends AppCompatActivity {
     public void StartCount(int minutes){
         int milliseconds = (minutes * 60) * 1000;
 
+        btnStart.setText("pause");
+        btnStart.setEnabled(false);
+        time.setEnabled(false);
+        isCounting = true;
+
+
 
         new CountDownTimer(milliseconds, 1000) {
             int counter = 0;
@@ -58,15 +70,14 @@ public class MainActivity extends AppCompatActivity {
             public void onTick(long millisUntilFinished){
 
                // Log.i("info", String.valueOf(millisUntilFinished));
-
-               int seconds = (int) (millisUntilFinished / 1000);
-                int minutes = seconds * 60;
+                milliLeft = millisUntilFinished;
+                Long min = (millisUntilFinished/(1000*60));
+                Long sec = ((millisUntilFinished/1000)-min*60);
 
                 circProgressBar.setProgress(counter);
 
-
-              //  time.setText(minutes + ":" + seconds);
-                time.setText(String.valueOf(millisUntilFinished));
+                time.setText(Long.toString(min) + ":" + Long.toString(sec));
+               // time.setText(String.valueOf(millisUntilFinished));
 
                 counter++;
             }
@@ -74,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 if(vibrator.hasVibrator()){
                     int i=0;
-                    while(i <= 4){
+                    while(i <= 2){
                         vibrator.vibrate(1000);
                         try {
                             Thread.sleep(1000);
@@ -87,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 counter=0;
-                time.setText("3");
+                time.setText("5");
+                btnStart.setEnabled(true);
+                time.setEnabled(true);
+                btnStart.setText("start");
             }
         }.start();
 
