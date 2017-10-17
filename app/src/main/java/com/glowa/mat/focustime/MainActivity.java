@@ -1,10 +1,15 @@
 package com.glowa.mat.focustime;
 
+import android.content.Context;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -13,7 +18,9 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
 
     Button btnStart;
-    TextView timeCounter;
+    ProgressBar circProgressBar;
+    TextView time;
+    Vibrator vibrator;
 
 
     @Override
@@ -22,16 +29,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnStart = (Button) findViewById(R.id.btnStart);
-        timeCounter = (TextView) findViewById(R.id.txtTime);
-
-        timeCounter.setText("00:00:000");
+        circProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        time = (TextView) findViewById(R.id.textView2);
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartCount(3);
+
+                   int iloscMinut = Integer.parseInt((String) time.getText());
+                    StartCount(iloscMinut);
+
             }
         });
+
+
+
+
     }
 
     public void StartCount(int minutes){
@@ -39,31 +53,41 @@ public class MainActivity extends AppCompatActivity {
 
 
         new CountDownTimer(milliseconds, 1000) {
-
-            long s = 60;
-            long ms = 1000;
+            int counter = 0;
 
             public void onTick(long millisUntilFinished){
-                long m = (millisUntilFinished / 1000) / 60;
 
-                timeCounter.setText(String.format("%d:%02d:%02d", m,s,ms) );
+               // Log.i("info", String.valueOf(millisUntilFinished));
+
+               int seconds = (int) (millisUntilFinished / 1000);
+                int minutes = seconds * 60;
+
+                circProgressBar.setProgress(counter);
 
 
-                ms--;
+              //  time.setText(minutes + ":" + seconds);
+                time.setText(String.valueOf(millisUntilFinished));
 
-                if(s == 0){
-                    s = 60;
-                }
-
-                if(ms == 0){
-                    ms = 1000;
-                    s--;
-                }
-
+                counter++;
             }
 
             public void onFinish() {
-                timeCounter.setText("done!");
+                if(vibrator.hasVibrator()){
+                    int i=0;
+                    while(i <= 4){
+                        vibrator.vibrate(1000);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        i++;
+                    }
+
+                }
+
+                counter=0;
+                time.setText("3");
             }
         }.start();
 

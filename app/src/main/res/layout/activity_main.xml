@@ -15,25 +15,37 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_weight="0.97"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:gravity="center"
         tools:layout_editor_absoluteY="8dp"
         tools:layout_editor_absoluteX="8dp" >
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="10"
+            android:layout_height="200dp"
+            android:progressDrawable="@drawable/circular_progress_bar"
+            android:max="100"
+            android:progress="69"
+            />
+
         <TextView
-            android:id="@+id/txtTime"
-            android:gravity="center"
-            android:textSize="30dp"
-            android:textColor="#a1a1a1"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_weight="1"
-            android:text="16:25:001" />
+            android:textColor="#cbd8e1"
+            android:text="5"
+            android:textSize="20dp" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         tools:layout_editor_absoluteX="-5dp"
@@ -44,7 +56,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
-            android:text="Press me" />
+            android:textSize="20dp"
+            android:background="#49555c"
+            android:textColor="#cbd8e1"
+
+            android:text="rest" />
     </LinearLayout>
 
 </LinearLayout>
